@@ -1,7 +1,5 @@
-<hgroup>
-  <h1>npm Weekly</h1>
-  <h2>Find out what we've been working on, thinking about, and talking about every week.</h2>
-</hgroup>
+<h1>npm Weekly</h1>
+<h2>Find out what we've been working on, thinking about, and talking about every week.</h2>
 
 <form action="//npmjs.us9.list-manage.com/subscribe/post?u=077dfd41302a71310cef619e5&amp;id=e17fe5d778" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
 
