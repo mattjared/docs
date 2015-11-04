@@ -8,6 +8,7 @@ var fs = require('fs')
 var strftime = require('strftime')
 var marky = require('marky-markdown')
 var frontmatter = require('html-frontmatter')
+var mansplain = require('mansplain')
 var _ = require('lodash')
 
 var merge = _.merge
@@ -30,6 +31,7 @@ emitter.on('file', function (filepath, stat) {
   var page = {
     title: null,
     heading: null,
+    subtitle: null,
     section: null,
     href: null,
     filename: filepath.replace(/.*\/content\//, ''),
@@ -50,7 +52,10 @@ emitter.on('file', function (filepath, stat) {
   var manPattern = new RegExp('^(.*) -- (.*)\\n=+\\n')
   if (page.content.match(manPattern)) {
     var manHead = manPattern.exec(page.content)
-    page.heading = manHead[2]
+    // remove man style (#) from title
+    var title = manHead[1].substring(0, manHead[1].length - 3)
+    page.heading = title
+    page.subtitle = manHead[2]
     page.content = page.content.replace(manHead[0], '')
   }
 
@@ -66,6 +71,10 @@ emitter.on('file', function (filepath, stat) {
     sanitize: false, // allow script tags and stuff
     prefixHeadingIds: false // don't apply safe prefixes to h1/h2... DOM ids
   }).html()
+
+  // Convert npm-cmd(#) style "links" to anchor elements"
+  var prefix_hash = { 1: 'cli', 5: 'files', 7: 'misc' }
+  page.content = mansplain({ input: page.content, prefix: prefix_hash })
 
   // Infer section from top directory
   if (page.filename.match(/\//)) {
